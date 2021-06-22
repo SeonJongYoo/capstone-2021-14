@@ -45,13 +45,12 @@ function preprocess(img) {
   console.log(`tensor: ${tensor}`);
   // console.log("1");
   //resize to 224 X 224
-  const resized = tf.image.resizeBilinear(tensor, [224, 224]).toFloat();
-  // Normalize the image
+  //const resized = tf.image.resizeBilinear(tensor, [224, 224]).toFloat();
   const offset = tf.scalar(255.0);
-  const normalized = tf.scalar(1.0).sub(resized.div(offset));
+  const normalized = tensor.toFloat().div(offset);
+  const resized = tf.image.resizeBilinear(normalized, [224, 224]);
   //We add a dimension to get a batch shape
-  const batched = normalized.expandDims(0);
-  // console.log("2");
+  const batched = resized.expandDims(0);
   return batched;
 }
 
